@@ -4,10 +4,11 @@ import sys
 import logging
 import logging.config
 from slackbot import settings
-from slackbot.bot import Bot
+
+from taskflowbot.core import bot
 
 
-def main():
+def taskflow():
     kw = {
         'format': '[%(asctime)s] %(message)s',
         'datefmt': '%m/%d/%Y %H:%M:%S',
@@ -16,8 +17,8 @@ def main():
     }
     logging.basicConfig(**kw)
     logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARNING)
-    bot = Bot()
-    bot.run()
+    tfbot = bot.Bot()
+    tfbot.run()
 
 if __name__ == '__main__':
-    main()
+    taskflow()
