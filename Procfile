@@ -1,1 +1,1 @@
-web: python taskflowbot/cmd/taskflow.py
+worker: python taskflowbot/cmd/taskflow.py
