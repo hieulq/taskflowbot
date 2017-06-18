@@ -1,4 +1,6 @@
 pbr>=2.0 # Apache-2.0
 slackbot # MIT
-Flask # BSD
+falcon # Apache-2.0
 oslo.config # Apache-2.0
+oslo.utils # Apache-2.0
+gunicorn # MIT

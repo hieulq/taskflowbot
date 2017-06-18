@@ -1,24 +1,31 @@
-#!/usr/bin/env python
+# Copyright 2017 Hieu LE
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+# not use this file except in compliance with the License. You may obtain
+# a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations
+# under the License.
 
-import sys
-import logging
-import logging.config
-from slackbot import settings
+import falcon
+from oslo_log import log
+from oslo_utils import importutils
 
 from taskflowbot.core import bot
 
+LOG = log.getLogger(__name__)
+
 
 def taskflow():
-    kw = {
-        'format': '[%(asctime)s] %(message)s',
-        'datefmt': '%m/%d/%Y %H:%M:%S',
-        'level': logging.DEBUG if settings.DEBUG else logging.INFO,
-        'stream': sys.stdout,
-    }
-    logging.basicConfig(**kw)
-    logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(logging.WARNING)
+    app = falcon.API(request=falcon.Request)
     tfbot = bot.Bot()
     tfbot.run()
+    return app
 
 if __name__ == '__main__':
     taskflow()
