@@ -1,1 +1,1 @@
-web: gunicorn -b 0.0.0.0:8080 taskflowbot.cmd.taskflow
+web: gunicorn -b 0.0.0.0:$PORT taskflowbot.cmd.taskflow --log-level=DEBUG --worker-class=gevent
