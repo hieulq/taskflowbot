@@ -5,4 +5,4 @@ oslo.config # Apache-2.0
 oslo.utils # Apache-2.0
 gunicorn # MIT
 oslo.log # Apache-2.0
-eventlet # MIT
+gevent # MIT
