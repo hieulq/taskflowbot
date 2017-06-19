@@ -12,9 +12,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import os
 import falcon
 from oslo_log import log
 from oslo_utils import importutils
+from gunicorn.six import iteritems
 
 from taskflowbot.core import bot
 
@@ -22,10 +24,39 @@ LOG = log.getLogger(__name__)
 
 
 def taskflow():
-    app = falcon.API(request=falcon.Request)
+    app = falcon.API(request_type=falcon.Request)
     tfbot = bot.Bot()
-    tfbot.run()
+    # tfbot.run()
     return app
 
+
+def start_gunicorn_server():
+    """Starts server using gunicorn server.
+    """
+    from gunicorn.app.base import Application
+
+    class WSGIServer(Application):
+        def __init__(self, app, options=None):
+            self.options = options or {}
+            self.application = app
+            super(WSGIServer, self).__init__()
+
+        def load_config(self):
+            config = dict(
+                [(key, value) for key, value in iteritems(self.options)
+                 if key in self.cfg.settings and value is not None])
+            for key, value in iteritems(config):
+                self.cfg.set(key.lower(), value)
+
+        def load(self):
+            return taskflow()
+
+    options = {
+        'bind': '%s:%s' % ('0.0.0.0', os.environ['PORT']),
+        'workers': 1,
+    }
+
+    WSGIServer(taskflow(), options).run()
+
 if __name__ == '__main__':
-    taskflow()
+    start_gunicorn_server()

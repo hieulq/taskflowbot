@@ -1,1 +1,1 @@
-web: gunicorn -b 0.0.0.0:8080 taskflowbot.cmd.taskflow
+web: python taskflowbot/cmd/taskflow.py
