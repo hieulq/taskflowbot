@@ -55,7 +55,7 @@ def start_gunicorn_server():
         'bind': '%s:%s' % ('0.0.0.0', os.environ['PORT']),
         'workers': 2,
         'loglevel': 'DEBUG',
-        'worker_class': 'gevent'
+        'worker_class': 'gthread'
     }
 
     WSGIServer(taskflow(), options).run()
