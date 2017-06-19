@@ -12,21 +12,32 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+import logging
+import logging.config
 import os
+import sys
+
 import falcon
-from oslo_log import log
-from oslo_utils import importutils
 from gunicorn.six import iteritems
+from gunicorn.six.moves import _thread
 
-from taskflowbot.core import bot
-
-LOG = log.getLogger(__name__)
+from taskflowbot.core import service
 
 
 def taskflow():
+    kw = {
+        'format': '[%(asctime)s] %(message)s',
+        'datefmt': '%m/%d/%Y %H:%M:%S',
+        'level': logging.DEBUG,
+        'stream': sys.stdout,
+    }
+    logging.basicConfig(**kw)
+    logging.getLogger('requests.packages.urllib3.connectionpool').setLevel(
+        logging.WARNING)
     app = falcon.API(request_type=falcon.Request)
-    tfbot = bot.Bot()
-    # tfbot.run()
+    if not service.initialized():
+        service.init()
+    _thread.start_new_thread(service.get_bot().run, tuple())
     return app
 
 
