@@ -7,3 +7,4 @@ gunicorn # MIT
 oslo.log # Apache-2.0
 rtmbot # MIT
 eventlet===0.17.4 # MIT
+futurist # Apache-2.0
